@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mobx_form/text_editing_controller_with_cursor_position.dart';
 
 class NumberTextField extends StatefulWidget {
   final String label;
@@ -18,7 +19,7 @@ class NumberTextField extends StatefulWidget {
 }
 
 class _NumberTextFieldState extends State<NumberTextField> {
-  final controller = TextEditingController();
+  final controller = TextEditingControllerWithCursorPosition();
 
   @override
   void didUpdateWidget(covariant NumberTextField oldWidget) {
@@ -51,8 +52,11 @@ class _NumberTextFieldState extends State<NumberTextField> {
       inputFormatters: [
         FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')),
       ],
-      onEditingComplete: () => widget.onChanged!(
-          controller.text.isEmpty ? 0.0 : double.parse(controller.text)),
+      onChanged: _onChanged,
     );
+  }
+
+  void _onChanged(String text) {
+    widget.onChanged!(text.isEmpty ? 0.0 : double.parse(text));
   }
 }
